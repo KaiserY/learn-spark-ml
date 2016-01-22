@@ -1,20 +1,17 @@
-package cn.shujuguan.training
+package cn.shujuguan.datatype
 
-import cn.shujuguan.common.{DataType, Features}
+import cn.shujuguan.common.{DataType, Util}
 import org.apache.spark.ml.classification.NaiveBayes
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
 import org.apache.spark.ml.{Pipeline, PipelineModel}
 import org.apache.spark.mllib.evaluation.MulticlassMetrics
-import org.apache.spark.mllib.linalg.{Vector, Vectors}
 import org.apache.spark.sql.{DataFrame, SQLContext}
 import org.apache.spark.{SparkConf, SparkContext}
 
-import scala.collection.mutable
-
 /**
-  * Created by yueyang on 1/6/16.
+  * Created by yueyang on 1/22/16.
   */
-object DataTypeTraining {
+object DataTypeNaiveBayes {
   def main(args: Array[String]) {
     val path = "/tmp/ml"
 
@@ -23,12 +20,19 @@ object DataTypeTraining {
       .setMaster("local")
 
     val sparkContext = new SparkContext(sparkConf)
+
     val sqlContext = new SQLContext(sparkContext)
+
+//    val trainingDataset = DataTypeDataset.makeDataset(sqlContext)
+//
+//    val dataFrame = trainingDataset.toDF().map(r => {
+//      (r.getDouble(0), r.getString(1), Util.string2Vector(r.getString(1), 100))
+//    }).toDF("label", "content", "features")
 
     val trainingRDD = DataTypeRDD.makeRDD(sparkContext)
 
-    val dataFrame = sqlContext.createDataFrame(trainingRDD.map(n => {
-      (n._1, n._2, makeFeaturesArray(n._2))
+    val dataFrame = sqlContext.createDataFrame(trainingRDD.map(d => {
+      (d.label, d.content, Util.string2Vector(d.content, 100))
     })).toDF("label", "content", "features")
 
     //    val splitsDataFrame = dataFrame.randomSplit(Array(0.75, 0.25))
@@ -88,53 +92,5 @@ object DataTypeTraining {
     stringBuilder.append("\n")
 
     println(stringBuilder)
-  }
-
-  def makeFeaturesArray(text: String): Vector = {
-
-    val limit = if (text.length > 100) 100 else text.length
-
-    val unicodePostionFeatureCount = 256 * 2 * 100
-
-    val unicodeNumberFeatureCount = Features.maxId * 101
-
-    var featureIndex, alphabet, number, dot, minus, at, colon = 0
-
-    var featuresMap = new mutable.HashMap[Int, Double]
-
-    val featureText = text.substring(0, limit)
-
-    featureText.getBytes("Unicode").drop(2).foreach(byte => {
-      val value = byte & 0xFF
-
-      val index = featureIndex
-
-      featureIndex += 256
-
-
-      featuresMap += index + value -> 5.0
-    })
-
-    featureText.foreach({
-      case char if '0' until '9' contains char => number += 1
-      case char if 'a' until 'z' contains char => alphabet += 1
-      case char if 'A' until 'Z' contains char => alphabet += 1
-      case '.' => dot += 1
-      case '-' => minus += 1
-      case '@' => at += 1
-      case ':' => colon += 1
-      case _ =>
-    })
-
-    featureIndex = unicodePostionFeatureCount
-
-    featuresMap += featureIndex + Features.NUMBER.id * 101 + number -> 10.0
-    featuresMap += featureIndex + Features.ALPHABET.id * 101 + alphabet -> 10.0
-    featuresMap += featureIndex + Features.DOT.id * 101 + dot -> 20.0
-    featuresMap += featureIndex + Features.MINUS.id * 101 + minus -> 20.0
-    featuresMap += featureIndex + Features.AT.id * 101 + at -> 20.0
-    featuresMap += featureIndex + Features.COLON.id * 101 + colon -> 20.0
-
-    Vectors.sparse(unicodePostionFeatureCount + unicodeNumberFeatureCount, featuresMap.toSeq)
   }
 }

@@ -1,6 +1,6 @@
 package cn.shujuguan.training
 
-import cn.shujuguan.DataType
+import cn.shujuguan.common.DataType
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 import org.joda.time.{LocalDate, LocalTime}

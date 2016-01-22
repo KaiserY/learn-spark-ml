@@ -1,17 +1,16 @@
 package cn.shujuguan
 
-import cn.shujuguan.training.{DataTypeTraining, DataTypeRDD}
+import cn.shujuguan.common.DataType
+import cn.shujuguan.training.{DataTypeRDD, DataTypeTraining}
 import org.apache.hadoop.conf.Configuration
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.classification.NaiveBayes
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
 import org.apache.spark.ml.feature.{HashingTF, IDF}
 import org.apache.spark.mllib.evaluation.MulticlassMetrics
-import org.apache.spark.mllib.linalg.{Vector, Vectors}
+import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.sql.{Row, SQLContext}
 import org.apache.spark.{SparkConf, SparkContext}
-
-import scala.collection.mutable
 
 /**
   * Created by yueyang on 12/28/15.

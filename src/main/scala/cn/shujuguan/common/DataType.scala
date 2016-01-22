@@ -1,4 +1,4 @@
-package cn.shujuguan
+package cn.shujuguan.common
 
 /**
   * Created by yueyang on 12/28/15.

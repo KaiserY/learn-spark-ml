@@ -1,6 +1,6 @@
 package cn.shujuguan.training
 
-import cn.shujuguan.DataType
+import cn.shujuguan.common.DataType
 import com.mongodb.hadoop.{MongoInputFormat, MongoOutputFormat}
 import org.apache.hadoop.conf.Configuration
 import org.apache.spark.sql.SQLContext
