@@ -1,31 +1,22 @@
-package cn.shujuguan
+package cn.shujuguan.datatype
 
 import akka.actor.Actor
 import spray.http.MediaTypes._
 import spray.routing._
 
 /**
-  * Created by yueyang on 12/29/15.
+  * Created by yueyang on 1/25/16.
   */
-// we don't implement our route structure directly in the service actor because
-// we want to be able to test it independently, without having to spin up an actor
-class MyServiceActor extends Actor with MyService {
+class DataTypeServiceActor extends Actor with DataTypeService {
 
-  // the HttpService trait defines only one abstract member, which
-  // connects the services environment to the enclosing actor or test
   def actorRefFactory = context
 
-  // this actor only runs our route, but you could add
-  // other things here, like request stream processing
-  // or timeout handling
-  def receive = runRoute(myRoute)
+  def receive = runRoute(route)
 }
 
+trait DataTypeService extends HttpService {
 
-// this trait defines our service behavior independently from the service actor
-trait MyService extends HttpService {
-
-  val myRoute = {
+  val route = {
     path("") {
       get {
         respondWithMediaType(`text/html`) {
@@ -43,7 +34,7 @@ trait MyService extends HttpService {
       pathPrefix("spark" / Rest) { content =>
         get {
           val text = java.net.URLDecoder.decode(content, "UTF-8")
-          val prediction = MLDataType.learn(text)
+          val prediction = DataTypeNaiveBayes.learn(text)
           respondWithMediaType(`text/html`) {
             // XML is marshalled to `text/xml` by default, so we simply override here
             complete {
