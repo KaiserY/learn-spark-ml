@@ -22,6 +22,7 @@ object DataTypeNaiveBayes {
 
   val sqlContext = new SQLContext(sparkContext)
 
+  // Dataset API
   //    val trainingDataset = DataTypeDataset.makeDataset(sqlContext)
   //
   //    val dataFrame = trainingDataset.toDF().map(r => {
@@ -63,9 +64,9 @@ object DataTypeNaiveBayes {
 
     stringBuilder.append("\n")
     stringBuilder.append(accuracy)
-    stringBuilder.append("\n")
+    stringBuilder.append("\n\n")
     stringBuilder.append(metrics.confusionMatrix.toString(10000, 10000))
-    stringBuilder.append("\n")
+    stringBuilder.append("\n\n")
     DataType.values.foreach(t => stringBuilder.append(t.toString.padTo(20, " ").mkString + "-->\t" + metrics.precision(t.id.toDouble) + "\n"))
     stringBuilder.append("\n")
 
@@ -90,7 +91,6 @@ object DataTypeNaiveBayes {
       (content, Util.string2Vector(content, 100))
     })).toDF("content", "features")
 
-    // Make predictions on test documents.
     model.transform(test)
       .select("content", "probability", "prediction")
       .collect()
