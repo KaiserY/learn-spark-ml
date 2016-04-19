@@ -19,6 +19,8 @@ object ExcelStreamReader {
       }
     }
 
+    println(workbook.getNumberOfSheets)
+
     val opcPackage = workbook.getPackage
 
     val xssfReader = new XSSFReader(opcPackage)
