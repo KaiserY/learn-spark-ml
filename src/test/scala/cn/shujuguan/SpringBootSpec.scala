@@ -1,12 +1,10 @@
 package cn.shujuguan
 
 import cn.shujuguan.controller.RootController
-import org.junit.runner.RunWith
 import org.scalatest.{FlatSpec, ShouldMatchers}
 import org.springframework.boot.test.SpringApplicationConfiguration
 import org.springframework.mock.web.MockServletContext
 import org.springframework.test.context.TestContextManager
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders._
@@ -16,7 +14,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders._
 /**
   * Created by kaisery on 2016/4/20.
   */
-@RunWith(classOf[SpringJUnit4ClassRunner])
 @SpringApplicationConfiguration(classes = Array(classOf[MockServletContext]))
 @WebAppConfiguration
 class SpringBootSpec extends FlatSpec with ShouldMatchers {
