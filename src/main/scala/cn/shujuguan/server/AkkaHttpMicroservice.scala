@@ -5,7 +5,6 @@ import akka.event.{Logging, LoggingAdapter}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives._
 import akka.stream.{ActorMaterializer, Materializer}
-import cn.shujuguan.datatype.DataTypeNaiveBayes
 import com.typesafe.config.{Config, ConfigFactory}
 
 import scala.concurrent.ExecutionContextExecutor

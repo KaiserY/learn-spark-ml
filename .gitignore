@@ -81,3 +81,7 @@ catalina.home_IS_UNDEFINED/
 # Scala-IDE specific
 .scala_dependencies
 .worksheet
+
+# log
+logs/
+*.log
